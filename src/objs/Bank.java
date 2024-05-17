@@ -1,25 +1,54 @@
 package objs;
 
+import java.util.Objects;
+
+/**
+ * {@code Bank} класс хранящий в себе название банка {@code name} и заголовок списка филиалов этого банка {@code branch}
+ * Является контейнером струтктуры ({@code Bank} - {@code Branch} - {@code ATM})
+ * Содержит все основные функции для работы с филиалами банка
+ */
 public class Bank {
 
+    /**
+     * Название банка
+     */
     private String name;
-
+    /**
+     * Заголовочный элемент списка филиалов
+     */
     private Branch branch;
 
+    /**
+    * Конструктор для создания нового обьекта Bank
+    *
+    * @param name название банка
+     */
     public Bank(String name){
         this.name = name;
     }
 
+    /**
+     * Выполняет поиск филиала банка.
+     * @param id идентификационный номер филиала.
+     * @param address адрес филиала.
+     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
+     */
     public Branch findBranch(long id,String address){
         Branch temp = getBranch();
         while (temp.getNext() != null){
-            if(temp.getId() == id && temp.getAddress() == address){
+            if(temp.getId() == id && Objects.equals(temp.getAddress(), address)){
                 return temp;
             }
             temp = temp.getNext();
         }
         return null;
     }
+
+    /**
+     * Выполняет поиск филиала банка.
+     * @param id идентификационный номер филиала.
+     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
+     */
     public Branch findBranch(long id){
         Branch temp = getBranch();
         while (temp.getNext() != null){
@@ -30,6 +59,11 @@ public class Bank {
         }
         return null;
     }
+    /**
+     * Выполняет поиск филиала банка.
+     * @param address адрес филиала.
+     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
+     */
     public Branch findBranch(String address){
         Branch temp = getBranch();
         while (temp.getNext() != null){
@@ -41,11 +75,21 @@ public class Bank {
         return null;
     }
 
+    /**
+     * Добавляет филиал {@code add} после филиала {@code find}
+     * @param find филиал после которого нужно добавить {@code add}
+     * @param add добовляемы филиал
+     */
     public void addBranch(Branch find,Branch add){
         Branch temp = find.getNext();
         add.setNext(temp);
-        temp.setNext(add);
+        find.setNext(add);
     }
+
+    /**
+     * Добовляет филиалл {@code add} в конец списка
+     * @param add добовляемы филиал
+     */
     public void addBranch(Branch add){
         Branch temp = branch;
         while (temp.getNext() != null){
@@ -53,16 +97,12 @@ public class Bank {
         }
         addBranch(temp,add);
     }
-    public void addBranch(long id,String address,Branch add){
-        addBranch(findBranch(id,address),add);
-    }
-    public void addBranch(long id,Branch add){
-        addBranch(findBranch(id),add);
-    }
-    public void addBranch(String address,Branch add){
-        addBranch(findBranch(address),add);
-    }
 
+    /**
+     * Удаляет филиал {@code branch} из списка
+     * @param branch удаляемы филиал
+     * @return удаленны филиал
+     */
     public Branch deleteBranch(Branch branch){
         Branch temp = this.branch;
         while (!temp.getNext().equals(branch)){
@@ -72,32 +112,43 @@ public class Bank {
             }
         }
         temp.setNext(branch.getNext());
+        branch.setNext(null);
         return branch;
     }
-    public Branch deleteBranch(long id,String address){
-        return deleteBranch(findBranch(id,address));
-    }
-    public Branch deleteBranch(long id){
-        return deleteBranch(findBranch(id));
-    }
-    public Branch deleteBranch(String address){
-        return deleteBranch(findBranch(address));
-    }
 
-
+    /**
+     * Функция возвращающая названеи банка
+     * @return название банка
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Функция для изменения названия банка
+     * @param name название банка
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * Функция для получения доступа к заголовку списка филиалов
+     * @return заголовок списка филилалов
+     */
     public Branch getBranch() {
         return branch;
     }
 
+    /**
+     * Функция для изменения заголовки списка филиалов
+     * @param branch заголовок списка филилалов
+     */
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
+
+    public void dispose(){
+
+    }
+
 }
