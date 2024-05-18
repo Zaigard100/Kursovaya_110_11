@@ -64,7 +64,7 @@ public class Bank {
     public Branch findBranch(String address){
         Branch temp = getBranch();
         while (temp.getNext() != null){
-            if(temp.getAddress() == address){
+            if(Objects.equals(temp.getAddress(), address)){
                 return temp;
             }
             temp = temp.getNext();
@@ -93,6 +93,10 @@ public class Bank {
      * @param add добовляемы филиал
      */
     public void addBranch(Branch find,Branch add){
+        if(branch==null){
+            branch = add;
+            return;
+        }
         Branch temp = find.getNext();
         add.setNext(temp);
         find.setNext(add);
@@ -114,20 +118,19 @@ public class Bank {
     }
     /**
      * Удаляет филиал {@code branch} из списка
+     *
      * @param branch удаляемы филиал
-     * @return удаленны филиал
      */
-    public Branch deleteBranch(Branch branch){
+    public void deleteBranch(Branch branch){
         Branch temp = this.branch;
         while (!temp.getNext().equals(branch)){
             temp = temp.getNext();
             if(temp == null){
-                return null;
+                return;
             }
         }
         temp.setNext(branch.getNext());
         branch.setNext(null);
-        return branch;
     }
     /**
      * Функция возвращающая названеи банка

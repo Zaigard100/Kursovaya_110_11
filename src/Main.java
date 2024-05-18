@@ -171,9 +171,7 @@ public class Main {
 
     public static void main(String[] args) {
         Utilities.init();
-        boolean run = true;
-        while(run){
-
+        while(true){
             System.out.println(
                     "\n1.  Создать Банк" +
                     "\n2.  Добавить филиал" +
@@ -189,10 +187,8 @@ public class Main {
                     "\n12. Завершить работу"
             );
 
-            int enter = Utilities.readInt();
-
+            int enter = Utilities.readUint();
             switch (enter){
-
                 case 1:
                     createBank();
                     break;

@@ -33,7 +33,7 @@ public class Branch {
     }
     /**
      * Добавляет в стек банкомат
-     * @param cashMachine
+     * @param cashMachine банкомат
      */
     public void addCashMachine(CashMachine cashMachine){
         cashMachine.setNext(this.cashMachine);
@@ -41,13 +41,11 @@ public class Branch {
     }
     /**
      * Удаляет из стека банкомат
-     * @return удаленный банкомат
      */
-    public CashMachine delCashMachine(){
+    public void delCashMachine(){
         CashMachine temp = cashMachine;
         cashMachine = cashMachine.getNext();
         temp.setNext(null);
-        return temp;
     }
 
     public CashMachine findCashMachine(long id){

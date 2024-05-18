@@ -30,8 +30,7 @@ public class Utilities {
     public static long readLong(){
         while (true) {
             try {
-                long num = console.nextInt();
-                return num;
+                return console.nextInt();
             } catch (InputMismatchException e) {
                 System.out.println("Введен неверный тип данных!" +
                         "\n Повторите ввод:");
@@ -102,8 +101,7 @@ public class Utilities {
         if (console.hasNext()) console.nextLine();
         while (true) {
             try {
-                String str = console.nextLine();
-                return str;
+                return console.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println("Введен неверный тип данных!" +
                         "\n Повторите ввод:");
@@ -152,7 +150,7 @@ public class Utilities {
         System.out.println(text);
         try(FileWriter writer = new FileWriter(fileName,false)){
             writer.write(text.toString());
-        }catch (IOException e){
+        }catch (IOException ignored){
 
         }
 
@@ -160,12 +158,11 @@ public class Utilities {
     public static Bank readBank() {
         System.out.println("Введите название файла:");
         String fileName = readLine();
-        StringBuilder text = new StringBuilder();
         File file = new File(fileName);
         Bank bank = null;
         if (file.exists()) {
             String line;
-            Branch branch = null;
+            Branch branch;
             try {
                 FileReader fr = new FileReader(fileName);
                 BufferedReader reader = new BufferedReader(fr);
