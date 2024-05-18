@@ -220,6 +220,7 @@ public class Main {
                             if(temp.findCashMachine(cashMachineId)!=null){
                                 System.out.println("В филилале №"+temp.getId()+" по адресу "+temp.getAddress()+ "найден банкомас c данным id");
                             }
+                            temp = temp.getNext();
                         }
                         System.out.println("Конец поиска");
                         break;
