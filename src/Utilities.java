@@ -1,12 +1,18 @@
+import objs.Bank;
+import objs.Branch;
+import objs.CashMachine;
+
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Класс для всяких инструментов по типу чтения с консоли и работе с файлами
+ */
 public class Utilities {
-
-
     private static Scanner console;
-
     /**
      * Инициализация класса {@code Utilities}.
      * <p>
@@ -15,7 +21,6 @@ public class Utilities {
     public static void init(){
         console = new Scanner(System.in);
     }
-
     /**
      * Функция для чтения с консоли данных типа {@code long}.
      * <p>
@@ -94,6 +99,7 @@ public class Utilities {
      * @return Возвращает строку введенную в консоль
      */
     public static String readLine(){
+        if (console.hasNext()) console.nextLine();
         while (true) {
             try {
                 String str = console.nextLine();
@@ -106,5 +112,85 @@ public class Utilities {
                         "\n Повторите ввод:");
             }
         }
+    }
+
+    public static void saveBank(Bank bank) {
+        System.out.println("Введите название файла:");
+        String fileName = readLine();
+        StringBuilder text = new StringBuilder();
+        File file = new File(fileName);
+        if(file.exists()){
+            file.delete();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        text.append(bank.getName());
+        text.append('\n');
+        Branch branch = bank.getBranch();
+        CashMachine cashMachine;
+        while (branch!=null){
+            text.append(branch.getId());
+            text.append('#');
+            text.append(branch.getAddress());
+            text.append(':');
+            cashMachine = branch.getCashMachine();
+            while (cashMachine!=null){
+                text.append(cashMachine.getId());
+                text.append('#');
+                cashMachine = cashMachine.getNext();
+            }
+            text.append('!');
+            text.append('\n');
+            branch = branch.getNext();
+        }
+        text.append('\n');
+        text.append('-');
+        System.out.println(text);
+        try(FileWriter writer = new FileWriter(fileName,false)){
+            writer.write(text.toString());
+        }catch (IOException e){
+
+        }
+
+    }
+    public static Bank readBank() {
+        System.out.println("Введите название файла:");
+        String fileName = readLine();
+        StringBuilder text = new StringBuilder();
+        File file = new File(fileName);
+        Bank bank = null;
+        if (file.exists()) {
+            String line;
+            Branch branch = null;
+            try {
+                FileReader fr = new FileReader(fileName);
+                BufferedReader reader = new BufferedReader(fr);
+                line = reader.readLine();
+                bank = new Bank(line);
+                line = reader.readLine();
+                String[] arr;
+
+                while (!Objects.equals(line, "-")) {
+                    arr = line.split(":")[0].split("#");
+                    branch = new Branch(Long.parseLong(arr[0]), arr[1]);
+                    arr = line.split(":")[1].split("#");
+                    for (String el : arr) {
+                        if (Objects.equals(el, "!")) break;
+                        branch.addCashMachine(new CashMachine(Long.parseLong(el)));
+                    }
+                    bank.addBranch(branch);
+                    line = reader.readLine();
+
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+
+        }
+        return bank;
     }
 }

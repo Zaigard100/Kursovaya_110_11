@@ -46,8 +46,9 @@ public class Bank {
      * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
      */
     public Branch findBranch(long id){
+        if(branch == null) return null;
         Branch temp = getBranch();
-        while (temp.getNext() != null){
+        while (temp != null){
             if(temp.getId() == id){
                 return temp;
             }
@@ -101,6 +102,10 @@ public class Bank {
      * @param add добовляемы филиал
      */
     public void addBranch(Branch add){
+        if(branch==null){
+            branch = add;
+            return;
+        }
         Branch temp = branch;
         while (temp.getNext() != null){
             temp = temp.getNext();

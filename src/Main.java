@@ -170,6 +170,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        Utilities.init();
         boolean run = true;
         while(run){
 
@@ -184,7 +185,8 @@ public class Main {
                     "\n8.  Удалить банк" +
                     "\n9.  Загрузить из файла" +
                     "\n10. Сохранить в файл" +
-                    "\n11. Завершить работу"
+                    "\n11. Вывести всю структуру" +
+                    "\n12. Завершить работу"
             );
 
             int enter = Utilities.readInt();
@@ -235,13 +237,43 @@ public class Main {
                     dispose();
                     break;
                 case 9:
-
+                    dispose();
+                    bank = Utilities.readBank();
                     break;
                 case 10:
-
+                    if(bank!=null) Utilities.saveBank(bank);
                     break;
                 case 11:
+                    StringBuilder text = new StringBuilder();
+                    text.append("Банк ");
+                    text.append(bank.getName());
+                    text.append('\n');
 
+                    Branch br = bank.getBranch();
+                    CashMachine cashMachine;
+                    while (br!=null){
+                        text.append('\t');
+                        text.append("Филиал №");
+                        text.append(br.getId());
+                        text.append(" по адресу ");
+                        text.append(br.getAddress());
+                        text.append('\n');
+                        cashMachine = br.getCashMachine();
+                        while (cashMachine!=null){
+                            text.append('\t');text.append('\t');
+                            text.append(cashMachine.getId());
+                            cashMachine = cashMachine.getNext();
+                            text.append('\n');
+                        }
+                        text.append("_______________________________");
+                        text.append('\n');
+                        br = br.getNext();
+                    }
+                    text.append('\n');
+                    System.out.println(text);
+                    break;
+                case 12:
+                    System.exit(0);
                     break;
 
             }
