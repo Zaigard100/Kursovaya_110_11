@@ -8,7 +8,6 @@ import java.util.Objects;
  * Содержит все основные функции для работы с филиалами банка
  */
 public class Bank {
-
     /**
      * Название банка
      */
@@ -17,7 +16,6 @@ public class Bank {
      * Заголовочный элемент списка филиалов
      */
     private Branch branch;
-
     /**
     * Конструктор для создания нового обьекта Bank
     *
@@ -26,7 +24,6 @@ public class Bank {
     public Bank(String name){
         this.name = name;
     }
-
     /**
      * Выполняет поиск филиала банка.
      * @param id идентификационный номер филиала.
@@ -43,7 +40,6 @@ public class Bank {
         }
         return null;
     }
-
     /**
      * Выполняет поиск филиала банка.
      * @param id идентификационный номер филиала.
@@ -74,7 +70,22 @@ public class Bank {
         }
         return null;
     }
-
+    /**
+     * Выполняет поиск предыдущего филиала банка.
+     * @param current филиал.
+     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
+     */
+    public Branch getPrevBranch(Branch current){
+        if(current==branch) return null;
+        Branch temp = branch;
+        do{
+            if(temp.getNext()==current){
+                return temp;
+            }
+            temp = temp.getNext();
+        }while (temp.getNext()!=null);
+        return null;
+    }
     /**
      * Добавляет филиал {@code add} после филиала {@code find}
      * @param find филиал после которого нужно добавить {@code add}
@@ -85,7 +96,6 @@ public class Bank {
         add.setNext(temp);
         find.setNext(add);
     }
-
     /**
      * Добовляет филиалл {@code add} в конец списка
      * @param add добовляемы филиал
@@ -97,7 +107,6 @@ public class Bank {
         }
         addBranch(temp,add);
     }
-
     /**
      * Удаляет филиал {@code branch} из списка
      * @param branch удаляемы филиал
@@ -115,7 +124,6 @@ public class Bank {
         branch.setNext(null);
         return branch;
     }
-
     /**
      * Функция возвращающая названеи банка
      * @return название банка
@@ -123,7 +131,6 @@ public class Bank {
     public String getName() {
         return name;
     }
-
     /**
      * Функция для изменения названия банка
      * @param name название банка
@@ -146,9 +153,12 @@ public class Bank {
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
-
+    /**
+     * Очистка структуры
+     */
     public void dispose(){
-
+        branch.dispose();
+        branch = null;
     }
 
 }

@@ -48,8 +48,11 @@ public class CashMachine {
     public void setNext(CashMachine next) {
         this.next = next;
     }
-
+    /**
+     * Очистка структуры
+     */
     public void dispose(){
-
+        next.dispose();
+        next = null;
     }
 }

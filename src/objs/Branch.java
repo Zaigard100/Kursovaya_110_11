@@ -49,6 +49,15 @@ public class Branch {
         temp.setNext(null);
         return temp;
     }
+
+    public CashMachine findCashMachine(long id){
+        CashMachine temp = cashMachine;
+        while (temp!=null){
+            if(temp.getId()==id) return temp;
+            temp = temp.getNext();
+        }
+        return null;
+    }
     /**
      * Функция для получения информации о идентификационном номере филиала
      * @return идентификационный номер филиала
@@ -105,8 +114,13 @@ public class Branch {
     public void setNext(Branch next) {
         this.next = next;
     }
-
+    /**
+     * Очистка структуры
+     */
     public void dispose(){
-
+        next.dispose();
+        next = null;
+        cashMachine.dispose();
+        cashMachine = null;
     }
 }
