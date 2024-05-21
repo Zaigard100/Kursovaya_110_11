@@ -1,7 +1,5 @@
 package objs;
 
-import java.util.Objects;
-
 /**
  * {@code Bank} класс хранящий в себе название банка {@code name} и заголовок списка филиалов этого банка {@code branch}
  * Является контейнером струтктуры ({@code Bank} - {@code Branch} - {@code ATM})
@@ -27,22 +25,6 @@ public class Bank {
     /**
      * Выполняет поиск филиала банка.
      * @param id идентификационный номер филиала.
-     * @param address адрес филиала.
-     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
-     */
-    public Branch findBranch(long id,String address){
-        Branch temp = getBranch();
-        while (temp.getNext() != null){
-            if(temp.getId() == id && Objects.equals(temp.getAddress(), address)){
-                return temp;
-            }
-            temp = temp.getNext();
-        }
-        return null;
-    }
-    /**
-     * Выполняет поиск филиала банка.
-     * @param id идентификационный номер филиала.
      * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
      */
     public Branch findBranch(long id){
@@ -50,21 +32,6 @@ public class Bank {
         Branch temp = getBranch();
         while (temp != null){
             if(temp.getId() == id){
-                return temp;
-            }
-            temp = temp.getNext();
-        }
-        return null;
-    }
-    /**
-     * Выполняет поиск филиала банка.
-     * @param address адрес филиала.
-     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
-     */
-    public Branch findBranch(String address){
-        Branch temp = getBranch();
-        while (temp.getNext() != null){
-            if(Objects.equals(temp.getAddress(), address)){
                 return temp;
             }
             temp = temp.getNext();
@@ -153,7 +120,6 @@ public class Bank {
     public Branch getBranch() {
         return branch;
     }
-
     /**
      * Функция для изменения заголовки списка филиалов
      * @param branch заголовок списка филилалов
@@ -169,5 +135,4 @@ public class Bank {
         branch.dispose();
         branch = null;
     }
-
 }

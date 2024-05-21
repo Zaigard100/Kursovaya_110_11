@@ -23,21 +23,19 @@ public class Main {
      * Функция для вызова меню добавления нового филиала в банке
      */
     static void addBranch(){//TODO в идеале переписать
-        long branchId;
+        long branchId,branchIdNew;
         String branchAddress;
         while (true) {// Ввод id
-            System.out.println("Введите id филиала:");
-            branchId = Utilities.readULong();
-            if(bank.findBranch(branchId)==null) break;
+            System.out.println("Введите id нового филиала:");
+            branchIdNew = Utilities.readULong();
+            if(bank.findBranch(branchIdNew)==null) break;
             else System.out.println(
                     "Данный id занят другим филиалом!" +
                             "\nВведите id повторно:"
             );
         }
-        System.out.println("Введите адрес филиала:");
-        branchAddress = Utilities.readLine();
         Branch temp = bank.getBranch();
-        if(temp == null) bank.setBranch(new Branch(branchId,branchAddress));//проверка на заполненость заголовка
+        if(temp == null) bank.setBranch(new Branch(branchIdNew));//проверка на заполненость заголовка
         else {
             System.out.println(
                     "Куда добавить филиал" +
@@ -50,31 +48,32 @@ public class Main {
             Branch find;
             switch (enter){
                 case 1:
-                    bank.addBranch(new Branch(branchId, branchAddress));
+                    bank.addBranch(new Branch(branchIdNew));
                     break;
                 case 2:
-                    bank.setBranch(new Branch(branchId,branchAddress));
+                    bank.setBranch(new Branch(branchIdNew));
                     bank.getBranch().setNext(temp);
                     break;
                 case 3:
-                    System.out.println("Введите id филиала:");
-                    branchId = Utilities.readULong();
-                    find = bank.findBranch(branchId);
-                    if(find!=null){
-                        bank.addBranch(find,new Branch(branchId, branchAddress));
-                    }else System.out.println("Ненайден филиал с данным id!");
-
-                case 4:
-                    System.out.println("Введите id филиала:");
+                    System.out.println("Введите id существующего филиала:");
                     branchId = Utilities.readULong();
                     find = bank.findBranch(branchId);
                     if(find!=null){
                         if(find==bank.getBranch()){
-                            bank.setBranch(new Branch(branchId,branchAddress));
+                            bank.setBranch(new Branch(branchIdNew));
                             bank.getBranch().setNext(temp);
-                        }else bank.addBranch(find,bank.getPrevBranch(find));
+                        }else bank.addBranch(bank.getPrevBranch(find),new Branch(branchIdNew));
                     }else System.out.println("Ненайден филиал с данным id!");
                     break;
+                case 4:
+                    System.out.println("Введите id существующего филиала:");
+                    branchId = Utilities.readULong();
+                    find = bank.findBranch(branchId);
+                    if(find!=null){
+                        bank.addBranch(find,new Branch(branchIdNew));
+                    }else System.out.println("Ненайден филиал с данным id!");
+                    break;
+
             }
         }
     }
@@ -83,37 +82,14 @@ public class Main {
      * @return филиал
      */
     static Branch findBranch(){
-        System.out.println(
-                "Выберите по каким данным искать филилал" +
-                        "\n1. По id" +
-                        "\n2. По адрессу" +
-                        "\n3. По id и адресу"
-        );
-        int enter = Utilities.readInt();
+        if(bank==null) return null;
         Branch find;
         long branchId;
-        String branchAddress;
-        switch (enter){
-            case 1:
-                System.out.println("Введите id филиала:");
-                branchId = Utilities.readULong();
-                find = bank.findBranch(branchId);
-                if(find!=null) return find;
-                else System.out.println("Не найден филиал с данным id!");
-                break;
-            case 2:
-                System.out.println("Введите адрес филиала:");
-                branchAddress = Utilities.readLine();
-                find = bank.findBranch(branchAddress);
-                if(find!=null) return find;
-                else System.out.println("Не найден филиал с данным адресом!");
-                break;
-            case 3:
-                find = findBranch();
-                if(find!=null) return find;
-                else System.out.println("Не найден филиал с данным и адресом!");
-                break;
-        }
+        System.out.println("Введите id филиала:");
+        branchId = Utilities.readULong();
+        find = bank.findBranch(branchId);
+        if(find!=null) return find;
+        else System.out.println("Не найден филиал с данным id!");
         return null;
     }
     /**
@@ -132,6 +108,7 @@ public class Main {
         Branch branch = findBranch();
         if(branch == null) return;
         long cashMachineId;
+        String cashMachineAddress;
         while (true) {// Ввод id
             System.out.println("Введите id банкомата:");
             cashMachineId = Utilities.readULong();
@@ -141,10 +118,13 @@ public class Main {
                             "\nВведите id повторно:"
             );
         }
-        if(branch.getCashMachine()==null) branch.setCashMachine(new CashMachine(cashMachineId));
-        else branch.addCashMachine(new CashMachine(cashMachineId));
+        System.out.println("Введите адрес банкомата:");
+        cashMachineAddress = Utilities.readLine();
+        if(branch.getCashMachine()==null) branch.setCashMachine(new CashMachine(cashMachineId,cashMachineAddress));
+        else branch.addCashMachine(new CashMachine(cashMachineId,cashMachineAddress));
     }
     static void deleteCashMachine(){
+        if(bank==null) return;
         System.out.println("С каким филиалом работаем?");
         Branch branch = findBranch();
         if(branch == null) return;
@@ -207,6 +187,7 @@ public class Main {
                     break;
                 case 6:
                     if(findBranch()!=null) System.out.println("Филиал найден");
+                    else System.out.println("Филиал не найден");
                     break;
                 case 7:
                     System.out.println("С каким филиалом работаем?(all-для просмотра всех филиалов)");
@@ -216,8 +197,9 @@ public class Main {
                         long cashMachineId = Utilities.readULong();
                         Branch temp = bank.getBranch();
                         while (temp != null){
-                            if(temp.findCashMachine(cashMachineId)!=null){
-                                System.out.println("В филилале №"+temp.getId()+" по адресу "+temp.getAddress()+ "найден банкомас c данным id");
+                            CashMachine f = temp.findCashMachine(cashMachineId);
+                            if(f!=null){
+                                System.out.println("В филилале №"+temp.getId()+" найден банкомат c данным id по адресу "+ f.getAddress());
                             }
                             temp = temp.getNext();
                         }
@@ -251,13 +233,13 @@ public class Main {
                         text.append('\t');
                         text.append("Филиал №");
                         text.append(br.getId());
-                        text.append(" по адресу ");
-                        text.append(br.getAddress());
                         text.append('\n');
                         cashMachine = br.getCashMachine();
                         while (cashMachine!=null){
                             text.append('\t');text.append('\t');
                             text.append(cashMachine.getId());
+                            text.append(" по адресу ");
+                            text.append(cashMachine.getAddress());
                             cashMachine = cashMachine.getNext();
                             text.append('\n');
                         }

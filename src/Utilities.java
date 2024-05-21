@@ -111,7 +111,10 @@ public class Utilities {
             }
         }
     }
-
+    /**
+     * Сохраняет структуру ({@code Bank} - {@code Branch} - {@code ATM}) в файл.
+     * @param bank банк который нужно сохранить
+     */
     public static void saveBank(Bank bank) {
         System.out.println("Введите название файла:");
         String fileName = readLine();
@@ -132,12 +135,12 @@ public class Utilities {
         CashMachine cashMachine;
         while (branch!=null){
             text.append(branch.getId());
-            text.append('#');
-            text.append(branch.getAddress());
             text.append(':');
             cashMachine = branch.getCashMachine();
             while (cashMachine!=null){
                 text.append(cashMachine.getId());
+                text.append(';');
+                text.append(cashMachine.getAddress());
                 text.append('#');
                 cashMachine = cashMachine.getNext();
             }
@@ -155,6 +158,10 @@ public class Utilities {
         }
 
     }
+    /**
+     * Загружает структуру банка из файла
+     * @return банк с данными из файла
+     */
     public static Bank readBank() {
         System.out.println("Введите название файла:");
         String fileName = readLine();
@@ -172,12 +179,12 @@ public class Utilities {
                 String[] arr;
 
                 while (!Objects.equals(line, "-")) {
-                    arr = line.split(":")[0].split("#");
-                    branch = new Branch(Long.parseLong(arr[0]), arr[1]);
+                    arr = line.split(":");
+                    branch = new Branch(Long.parseLong(arr[0]));
                     arr = line.split(":")[1].split("#");
                     for (String el : arr) {
                         if (Objects.equals(el, "!")) break;
-                        branch.addCashMachine(new CashMachine(Long.parseLong(el)));
+                        branch.addCashMachine(new CashMachine(Long.parseLong(el.split(";")[0]),el.split(";")[1]));
                     }
                     bank.addBranch(branch);
                     line = reader.readLine();

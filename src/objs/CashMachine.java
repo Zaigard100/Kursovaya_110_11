@@ -10,6 +10,10 @@ public class CashMachine {
      */
     private long id;
     /**
+     * Место нахождение/адресс филиала
+     */
+    private String address;
+    /**
      * Следующий банкомат в стеке
      */
     private CashMachine next;
@@ -17,8 +21,9 @@ public class CashMachine {
      * Создает баманкомат с индетификационым номером.
      * @param id идентификационный номер банкомата
      */
-    public CashMachine(long id) {
+    public CashMachine(long id, String address) {
         this.id = id;
+        this.address = address;
     }
     /**
      * Функция для получения идентификационного номера банкомата
@@ -35,9 +40,26 @@ public class CashMachine {
         this.id = id;
     }
     /**
+     * Функция для получения адреса банкомата
+     * @return  адреса банкомата
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Функция для изменения адреса банкомата
+     * @param address  адреса банкомата
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
      * Функция для получения доступа к следующему банкомату в стеке
      * @return банкомат
      */
+
     public CashMachine getNext() {
         return next;
     }
