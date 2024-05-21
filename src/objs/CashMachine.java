@@ -52,6 +52,7 @@ public class CashMachine {
      * Очистка структуры
      */
     public void dispose(){
+        if(next==null) return;
         next.dispose();
         next = null;
     }

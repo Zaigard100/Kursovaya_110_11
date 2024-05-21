@@ -13,10 +13,11 @@ public class Main {
      * Функция для создания нового банка. Если банк не пустой, то он зарание удаляется
      */
     static void createBank(){
-        dispose();
-        System.out.println("Введите название банка:");
-        String bankName = Utilities.readLine();
-        bank = new Bank(bankName);
+        if(dispose()) {
+            System.out.println("Введите название банка:");
+            String bankName = Utilities.readLine();
+            bank = new Bank(bankName);
+        }
     }
     /**
      * Функция для вызова меню добавления нового филиала в банке
@@ -108,11 +109,7 @@ public class Main {
                 else System.out.println("Не найден филиал с данным адресом!");
                 break;
             case 3:
-                System.out.println("Введите id филиала:");
-                branchId = Utilities.readULong();
-                System.out.println("Введите адресс филиала:");
-                branchAddress = Utilities.readLine();
-                find = bank.findBranch(branchId,branchAddress);
+                find = findBranch();
                 if(find!=null) return find;
                 else System.out.println("Не найден филиал с данным и адресом!");
                 break;
@@ -156,16 +153,20 @@ public class Main {
     /**
      * Удаление банка с предупреждением.
      */
-    static void dispose(){
+    static boolean dispose(){
         if(bank!=null) {
             System.out.println(
                     "У вас есть не сохраненые данные." +
                     "\nХотите продолжить?(y/n):"
             );
             String enter = Utilities.readLine();
-            if(!Objects.equals(enter, "y")) return;
+            Utilities.readLine();
+            if(!Objects.equals(enter, "y")) return false;
             bank.dispose();
             bank = null;
+            return true;
+        }else{
+            return true;
         }
     }
 
@@ -233,8 +234,7 @@ public class Main {
                     dispose();
                     break;
                 case 9:
-                    dispose();
-                    bank = Utilities.readBank();
+                    if(dispose()) bank = Utilities.readBank();
                     break;
                 case 10:
                     if(bank!=null) Utilities.saveBank(bank);

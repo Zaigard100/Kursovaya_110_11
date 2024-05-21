@@ -123,7 +123,7 @@ public class Bank {
      */
     public void deleteBranch(Branch branch){
         Branch temp = this.branch;
-        while (!temp.getNext().equals(branch)){
+        while (!temp.equals(branch)){
             temp = temp.getNext();
             if(temp == null){
                 return;
@@ -165,6 +165,7 @@ public class Bank {
      * Очистка структуры
      */
     public void dispose(){
+        if(branch==null) return;;
         branch.dispose();
         branch = null;
     }

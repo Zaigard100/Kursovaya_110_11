@@ -116,8 +116,10 @@ public class Branch {
      * Очистка структуры
      */
     public void dispose(){
+        if(next == null) return;
         next.dispose();
         next = null;
+        if(cashMachine==null) return;
         cashMachine.dispose();
         cashMachine = null;
     }
