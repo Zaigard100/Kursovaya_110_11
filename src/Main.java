@@ -69,9 +69,8 @@ public class Main {
                     System.out.println("Введите id существующего филиала:");
                     branchId = Utilities.readULong();
                     find = bank.findBranch(branchId);
-                    if(find!=null){
-                        bank.addBranch(find,new Branch(branchIdNew));
-                    }else System.out.println("Ненайден филиал с данным id!");
+                    if(find!=null) bank.addBranch(find,new Branch(branchIdNew));
+                    else System.out.println("Ненайден филиал с данным id!");
                     break;
 
             }
@@ -79,13 +78,13 @@ public class Main {
     }
     /**
      * Функция для вызова меню поиска филиала
-     * @return филиал
+     * @return если находит филиал возврацает его, иначе {@code null}
      */
     static Branch findBranch(){
         if(bank==null) return null;
         Branch find;
         long branchId;
-        System.out.println("Введите id филиала:");
+        System.out.println("Введите id существующего филиала:");
         branchId = Utilities.readULong();
         find = bank.findBranch(branchId);
         if(find!=null) return find;
@@ -99,7 +98,6 @@ public class Main {
         Branch branch = findBranch();
         if(branch != null) bank.deleteBranch(branch);
     }
-
     /**
      * Функция для создания банкомата в филиале
      */
@@ -121,14 +119,85 @@ public class Main {
         System.out.println("Введите адрес банкомата:");
         cashMachineAddress = Utilities.readLine();
         if(branch.getCashMachine()==null) branch.setCashMachine(new CashMachine(cashMachineId,cashMachineAddress));
-        else branch.addCashMachine(new CashMachine(cashMachineId,cashMachineAddress));
+        else branch.pushCashMachine(new CashMachine(cashMachineId,cashMachineAddress));
     }
+    /**
+     * Функция для вызова меню поиска банкомата в филиале;
+     * @param br филиал в котором ищем банкомат
+     * @return если находит банкомат возвращает его иначе {@code null}
+     */
+    static CashMachine findCashMachine(Branch br,int enter,long cashMachineId,String cashMachineAddress){
+        if(bank==null) return null;
+        if(br==null) return null;
+        CashMachine find;
+        switch (enter) {
+            case 1:
+                find = br.findCashMachine(cashMachineId);
+                if (find != null) return find;
+                return null;
+            case 2:
+                find = br.findCashMachine(cashMachineAddress);
+                if (find != null) return find;
+                return null;
+            case 3:
+                find = br.findCashMachine(cashMachineId,cashMachineAddress);
+                if (find != null) return find;
+                return null;
+        }
+        return null;
+    }
+    /**
+     * Функция для вызова меню удаления банкомата
+     */
     static void deleteCashMachine(){
         if(bank==null) return;
         System.out.println("С каким филиалом работаем?");
         Branch branch = findBranch();
         if(branch == null) return;
-        branch.delCashMachine();
+        branch.popCashMachine();
+    }
+    /**
+     * Функция для вывода результата поиска филиала
+     */
+    static void findBranchInBank(){
+        if(findBranch()!=null) System.out.println("Филиал найден");
+        else System.out.println("Филиал не найден");
+    }
+    /**
+     * Функция для вызова меню поиска банкомата
+     */
+    static void findCashMachineInBank(){
+        long cashMachineId = 0;
+        String cashMachineAddress = "";
+        System.out.println("Поиск по всем филиалам?(y/n)");
+        String str = Utilities.readLine();
+        System.out.println("Во каким данным искать банкомат?" +
+                "\n1. По id" +
+                "\n2. По адресу" +
+                "\n3. По адресу и id");
+        int enter = Utilities.readUint();
+        if(enter==1||enter==3){
+            System.out.println("Введите id банкомата:");
+            cashMachineId=Utilities.readULong();
+        }
+        if(enter==2||enter==3){
+            System.out.println("Введите адрес банкомата:");
+            cashMachineAddress=Utilities.readLine();
+        }
+        if(Objects.equals(str, "y")){
+            Branch temp = bank.getBranch();
+            while (temp != null){
+                CashMachine f = findCashMachine(temp,enter,cashMachineId,cashMachineAddress);
+                if(f!=null){
+                    System.out.println("В филилале №"+temp.getId()+" найден банкомат c id "+f.getId()+" по адресу "+ f.getAddress());
+                }
+                temp = temp.getNext();
+            }
+            System.out.println("Конец поиска");
+        }else {
+            if (findCashMachine(findBranch(),enter,cashMachineId,cashMachineAddress) != null) System.out.println("Банкомат найден");
+            else System.out.println("Банкомант не найден");
+        }
     }
     /**
      * Удаление банка с предупреждением.
@@ -149,6 +218,37 @@ public class Main {
             return true;
         }
     }
+    /**
+     * Функция для вываода всей структуры банка
+     */
+    static void showBank(){
+        StringBuilder text = new StringBuilder();
+        text.append("Банк ");
+        text.append(bank.getName());
+        text.append('\n');
+        Branch br = bank.getBranch();
+        CashMachine cashMachine;
+        while (br!=null){
+            text.append('\t');
+            text.append("Филиал №");
+            text.append(br.getId());
+            text.append('\n');
+            cashMachine = br.getCashMachine();
+            while (cashMachine!=null){
+                text.append('\t');text.append('\t');
+                text.append(cashMachine.getId());
+                text.append(" по адресу ");
+                text.append(cashMachine.getAddress());
+                cashMachine = cashMachine.getNext();
+                text.append('\n');
+            }
+            text.append("_______________________________");
+            text.append('\n');
+            br = br.getNext();
+        }
+        text.append('\n');
+        System.out.println(text);
+    }
 
     public static void main(String[] args) {
         Utilities.init();
@@ -167,7 +267,6 @@ public class Main {
                     "\n11. Вывести всю структуру" +
                     "\n12. Завершить работу"
             );
-
             int enter = Utilities.readUint();
             switch (enter){
                 case 1:
@@ -186,31 +285,10 @@ public class Main {
                     deleteCashMachine();
                     break;
                 case 6:
-                    if(findBranch()!=null) System.out.println("Филиал найден");
-                    else System.out.println("Филиал не найден");
+                    findBranchInBank();
                     break;
                 case 7:
-                    System.out.println("С каким филиалом работаем?(all-для просмотра всех филиалов)");
-                    String str = Utilities.readLine();
-                    if(Objects.equals(str, "all")){
-                        System.out.println("Введите id банкомата:");
-                        long cashMachineId = Utilities.readULong();
-                        Branch temp = bank.getBranch();
-                        while (temp != null){
-                            CashMachine f = temp.findCashMachine(cashMachineId);
-                            if(f!=null){
-                                System.out.println("В филилале №"+temp.getId()+" найден банкомат c данным id по адресу "+ f.getAddress());
-                            }
-                            temp = temp.getNext();
-                        }
-                        System.out.println("Конец поиска");
-                        break;
-                    }
-                    Branch branch = findBranch();
-                    if(branch == null) return;
-                    System.out.println("Введите id банкомата:");
-                    long cashMachineId = Utilities.readULong();
-                    if(branch.findCashMachine(cashMachineId)!=null) System.out.println("Банкомат найден найден");
+                    findCashMachineInBank();
                     break;
                 case 8:
                     dispose();
@@ -222,41 +300,13 @@ public class Main {
                     if(bank!=null) Utilities.saveBank(bank);
                     break;
                 case 11:
-                    StringBuilder text = new StringBuilder();
-                    text.append("Банк ");
-                    text.append(bank.getName());
-                    text.append('\n');
-
-                    Branch br = bank.getBranch();
-                    CashMachine cashMachine;
-                    while (br!=null){
-                        text.append('\t');
-                        text.append("Филиал №");
-                        text.append(br.getId());
-                        text.append('\n');
-                        cashMachine = br.getCashMachine();
-                        while (cashMachine!=null){
-                            text.append('\t');text.append('\t');
-                            text.append(cashMachine.getId());
-                            text.append(" по адресу ");
-                            text.append(cashMachine.getAddress());
-                            cashMachine = cashMachine.getNext();
-                            text.append('\n');
-                        }
-                        text.append("_______________________________");
-                        text.append('\n');
-                        br = br.getNext();
-                    }
-                    text.append('\n');
-                    System.out.println(text);
+                    showBank();
                     break;
                 case 12:
+                    dispose();
                     System.exit(0);
                     break;
-
             }
-
         }
-
     }
 }

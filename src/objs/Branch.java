@@ -21,9 +21,8 @@ public class Branch {
      */
     private Branch next;
     /**
-     * Создает обьект с инвормацией о филиале.
+     * Создает обьект с информацией о филиале.
      * @param id идетификационный номер. Недолжен повторятся.
-     * @param address адресс/местонахождения филиала
      */
     public Branch(long id) {
         this.id = id;
@@ -32,22 +31,22 @@ public class Branch {
      * Добавляет в стек банкомат
      * @param cashMachine банкомат
      */
-    public void addCashMachine(CashMachine cashMachine){
+    public void pushCashMachine(CashMachine cashMachine){
         cashMachine.setNext(this.cashMachine);
         this.cashMachine = cashMachine;
     }
     /**
      * Удаляет из стека банкомат
      */
-    public void delCashMachine(){
+    public void popCashMachine(){
         CashMachine temp = cashMachine;
         cashMachine = cashMachine.getNext();
         temp.setNext(null);
     }
     /**
-     * Поиск банкамата в стеке
-     * @param id идентификационныйномер банкомата
-     * @return Если находит банкомат возвращает его же, иначе возвращает {@code null}.
+     * Функция для поиска банкамата в стеке
+     * @param id идентификационный номер банкомата
+     * @return если находит банкомат возвращает его же, иначе возвращает {@code null}.
      */
     public CashMachine findCashMachine(long id){
         CashMachine temp = cashMachine;
@@ -57,6 +56,11 @@ public class Branch {
         }
         return null;
     }
+    /**
+     * Функция для поиска банкомата в стеке
+     * @param address адрес искомого банкомата
+     * @return если находит банкомат возвращает его же, иначе возвращает {@code null}.
+     */
     public CashMachine findCashMachine(String address){
         CashMachine temp = cashMachine;
         while (temp!=null){
@@ -65,6 +69,12 @@ public class Branch {
         }
         return null;
     }
+    /**
+     * Функция для поиска банкомата в стеке
+     * @param id идентификационный номер банкомата
+     * @param address адрес искомого банкомата
+     * @return если находит банкомат возвращает его же, иначе возвращает {@code null}.
+     */
     public CashMachine findCashMachine(long id,String address){
         CashMachine temp = cashMachine;
         while (temp!=null){

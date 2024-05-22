@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /**
- * Класс для всяких инструментов по типу чтения с консоли и работе с файлами
+ * Класс для всяких инструментов по типу чтения с консоли и работы с файлами
  */
 public class Utilities {
     private static Scanner console;
@@ -32,9 +32,13 @@ public class Utilities {
             try {
                 return console.nextInt();
             } catch (InputMismatchException e) {
+                console.close();
+                init();
                 System.out.println("Введен неверный тип данных!" +
                         "\n Повторите ввод:");
             } catch (NoSuchElementException e){
+                console.close();
+                init();
                 System.out.println("Нет данных для чтения!" +
                         "\n Повторите ввод:");
             }
@@ -103,9 +107,13 @@ public class Utilities {
             try {
                 return console.nextLine();
             } catch (InputMismatchException e) {
+                console.close();
+                init();
                 System.out.println("Введен неверный тип данных!" +
                         "\n Повторите ввод:");
             } catch (NoSuchElementException e){
+                console.close();
+                init();
                 System.out.println("Нет данных для чтения!" +
                         "\n Повторите ввод:");
             }
@@ -184,7 +192,7 @@ public class Utilities {
                     arr = line.split(":")[1].split("#");
                     for (String el : arr) {
                         if (Objects.equals(el, "!")) break;
-                        branch.addCashMachine(new CashMachine(Long.parseLong(el.split(";")[0]),el.split(";")[1]));
+                        branch.pushCashMachine(new CashMachine(Long.parseLong(el.split(";")[0]),el.split(";")[1]));
                     }
                     bank.addBranch(branch);
                     line = reader.readLine();

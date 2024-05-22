@@ -90,7 +90,7 @@ public class Bank {
      */
     public void deleteBranch(Branch branch){
         Branch temp = this.branch;
-        while (!temp.equals(branch)){
+        while (!temp.getNext().equals(branch)){
             temp = temp.getNext();
             if(temp == null){
                 return;
