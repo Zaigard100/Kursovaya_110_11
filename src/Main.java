@@ -187,6 +187,7 @@ public class Main {
     static void showBank(){
         if(bank==null){
             System.out.println("Пусто");
+            return;
         }
         StringBuilder text = new StringBuilder();
         text.append("Банк ");

@@ -72,6 +72,10 @@ public class Bank {
      */
     public void deleteBranch(Branch branch){
         Branch temp = this.branch;
+        if(temp==branch){
+            this.branch = branch.getNext();
+            return;
+        }
         while (!temp.getNext().equals(branch)){
             temp = temp.getNext();
             if(temp == null){

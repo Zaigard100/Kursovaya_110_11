@@ -156,7 +156,6 @@ public class Utilities {
             text.append('\n');
             branch = branch.getNext();
         }
-        text.append('\n');
         text.append('-');
         System.out.println(text);
         try(FileWriter writer = new FileWriter(fileName,false)){
