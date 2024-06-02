@@ -202,6 +202,8 @@ public class Utilities {
                 System.out.println(ex.getMessage());
             }
 
+        }else{
+            System.out.println("Файл не найден!");
         }
         return bank;
     }

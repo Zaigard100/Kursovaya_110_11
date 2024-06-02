@@ -23,8 +23,7 @@ public class Main {
      * Функция для вызова меню добавления нового филиала в банке
      */
     static void addBranch(){//TODO в идеале переписать
-        long branchId,branchIdNew;
-        String branchAddress;
+        long branchIdNew;
         while (true) {// Ввод id
             System.out.println("Введите id нового филиала:");
             branchIdNew = Utilities.readULong();
@@ -37,43 +36,7 @@ public class Main {
         Branch temp = bank.getBranch();
         if(temp == null) bank.setBranch(new Branch(branchIdNew));//проверка на заполненость заголовка
         else {
-            System.out.println(
-                    "Куда добавить филиал" +
-                    "\n1. В конец" +
-                    "\n2. В начало" +
-                    "\n3. Перед" +
-                    "\n4. После"
-            );
-            int enter = Utilities.readInt();
-            Branch find;
-            switch (enter){
-                case 1:
-                    bank.addBranch(new Branch(branchIdNew));
-                    break;
-                case 2:
-                    bank.setBranch(new Branch(branchIdNew));
-                    bank.getBranch().setNext(temp);
-                    break;
-                case 3:
-                    System.out.println("Введите id существующего филиала:");
-                    branchId = Utilities.readULong();
-                    find = bank.findBranch(branchId);
-                    if(find!=null){
-                        if(find==bank.getBranch()){
-                            bank.setBranch(new Branch(branchIdNew));
-                            bank.getBranch().setNext(temp);
-                        }else bank.addBranch(bank.getPrevBranch(find),new Branch(branchIdNew));
-                    }else System.out.println("Ненайден филиал с данным id!");
-                    break;
-                case 4:
-                    System.out.println("Введите id существующего филиала:");
-                    branchId = Utilities.readULong();
-                    find = bank.findBranch(branchId);
-                    if(find!=null) bank.addBranch(find,new Branch(branchIdNew));
-                    else System.out.println("Ненайден филиал с данным id!");
-                    break;
-
-            }
+            bank.addBranch(new Branch(branchIdNew));
         }
     }
     /**
@@ -222,6 +185,9 @@ public class Main {
      * Функция для вываода всей структуры банка
      */
     static void showBank(){
+        if(bank==null){
+            System.out.println("Пусто");
+        }
         StringBuilder text = new StringBuilder();
         text.append("Банк ");
         text.append(bank.getName());

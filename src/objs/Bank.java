@@ -38,50 +38,32 @@ public class Bank {
         }
         return null;
     }
+
     /**
-     * Выполняет поиск предыдущего филиала банка.
-     * @param current филиал.
-     * @return Если находит филиал возвращает его же, иначе возвращает {@code null}.
-     */
-    public Branch getPrevBranch(Branch current){
-        if(current==branch) return null;
-        Branch temp = branch;
-        do{
-            if(temp.getNext()==current){
-                return temp;
-            }
-            temp = temp.getNext();
-        }while (temp.getNext()!=null);
-        return null;
-    }
-    /**
-     * Добавляет филиал {@code add} после филиала {@code find}
-     * @param find филиал после которого нужно добавить {@code add}
-     * @param add добовляемы филиал
-     */
-    public void addBranch(Branch find,Branch add){
-        if(branch==null){
-            branch = add;
-            return;
-        }
-        Branch temp = find.getNext();
-        add.setNext(temp);
-        find.setNext(add);
-    }
-    /**
-     * Добовляет филиалл {@code add} в конец списка
-     * @param add добовляемы филиал
+     * Добовляет филиалл {@code add} в список
+     * @param add добовляемый филиал
      */
     public void addBranch(Branch add){
         if(branch==null){
             branch = add;
             return;
         }
+        if(add.getId()<branch.getId()){
+            add.setNext(branch);
+            branch = add;
+            return;
+        }
         Branch temp = branch;
+
         while (temp.getNext() != null){
+            if(add.getId()< temp.getNext().getId()){
+                add.setNext(temp.getNext());
+                temp.setNext(add);
+                return;
+            }
             temp = temp.getNext();
         }
-        addBranch(temp,add);
+        temp.setNext(add);
     }
     /**
      * Удаляет филиал {@code branch} из списка
